@@ -119,6 +119,14 @@ conda activate cat_dog_env
 ### Step 3: Install Dependencies
 
 ```bash
+# Install all required packages from requirements.txt
+pip install -r requirements.txt
+```
+
+**Note:** The `requirements.txt` includes TensorFlow 2.10.1 which automatically installs compatible CUDA and cuDNN libraries via pip. No separate cuDNN installation is needed.
+
+**Alternative Manual Installation:**
+```bash
 # Install NumPy (specific version for TensorFlow compatibility)
 conda install numpy=1.26.4 -y
 
@@ -126,10 +134,8 @@ conda install numpy=1.26.4 -y
 pip install tensorflow[and-cuda]==2.10.0
 
 # Install other dependencies
-pip install jupyter matplotlib seaborn pandas pillow scikit-learn xlsxwriter openpyxl
+pip install jupyter matplotlib seaborn pandas pillow scipy xlsxwriter
 ```
-
-**Note:** TensorFlow 2.10.0 with the `[and-cuda]` option automatically installs compatible CUDA and cuDNN libraries via pip. No separate cuDNN installation is needed.
 
 ### Step 4: Verify GPU Setup (Optional)
 
@@ -342,7 +348,7 @@ Output (Binary: Cat=0, Dog=1)
 ```bash
 # Install TensorFlow with CUDA and cuDNN
 pip uninstall tensorflow
-pip install tensorflow[and-cuda]==2.10.0
+pip install tensorflow[and-cuda]==2.10.1
 
 # Restart kernel and check
 import tensorflow as tf
@@ -364,28 +370,30 @@ conda install numpy=1.26.4 -y
 ```bash
 # Reinstall TensorFlow
 pip uninstall tensorflow keras
-pip install tensorflow[and-cuda]==2.10.0
+pip install tensorflow[and-cuda]==2.10.1
 ```
 
 ## 📦 Dependencies
 
 ### Core Libraries
-- `tensorflow==2.10.0` - Deep learning framework (includes CUDA and cuDNN via pip)
+- `tensorflow==2.10.1` - Deep learning framework (includes CUDA and cuDNN via pip)
 - `numpy==1.26.4` - Numerical computing
-- `pandas` - Data manipulation
-- `pillow` - Image processing
+- `pandas==2.3.3` - Data manipulation
+- `pillow==11.3.0` - Image processing
+- `scipy==1.13.1` - Scientific computing
 
 ### Visualization
-- `matplotlib` - Plotting
-- `seaborn` - Statistical visualizations
+- `matplotlib==3.9.4` - Plotting
+- `seaborn==0.13.2` - Statistical visualizations
 
 ### Excel Export
-- `xlsxwriter` - Excel file creation with images
-- `openpyxl` - Excel file manipulation
+- `xlsxwriter==3.2.9` - Excel file creation with images
 
 ### Development
-- `jupyter` - Interactive notebooks
-- `scikit-learn` - ML utilities
+- `jupyter` - Interactive notebooks (ipykernel, jupyter-client, jupyter-core)
+- `keras==2.10.0` - High-level neural networks API
+
+**Full dependencies list:** See `requirements.txt` for complete package list with versions.
 
 ## 🎓 Model Training Tips
 
@@ -441,6 +449,6 @@ For issues or questions:
 **Last Updated:** October 26, 2025  
 **Version:** 1.0.0  
 **Python Version:** 3.10+  
-**TensorFlow Version:** 2.10.0
+**TensorFlow Version:** 2.10.1
 
 🎉 **Happy Classifying!** 🐱🐶
