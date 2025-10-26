@@ -478,9 +478,6 @@ Output (Binary: Cat=0, Dog=1)
 ![Model Size Comparison](assets/model_size_comparison.png)
 *Comparison of model sizes: Keras vs TFLite Standard vs TFLite Quantized*
 
-![Inference Benchmark](assets/inference_benchmark.png)
-*Inference speed comparison showing significant performance improvements with TFLite models*
-
 ![TFLite Sample Predictions](assets/tflite_sample_predictions.png)
 *TFLite quantized model predictions demonstrating maintained accuracy after quantization*
 
