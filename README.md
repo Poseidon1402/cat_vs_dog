@@ -259,10 +259,10 @@ Output (Binary: Cat=0, Dog=1)
 ## 📈 Results
 
 ### Training Performance
-- **Training Accuracy:** 85-95%
-- **Validation Accuracy:** 85-90%
-- **Training Loss:** < 0.3
-- **Validation Loss:** < 0.4
+- **Training Accuracy:** 96.88 %
+- **Validation Accuracy:** 96.47 %
+- **Training Loss:** 0.0914
+- **Validation Loss:** 0.0908
 
 ### Test Set Performance (12,500 images)
 - **Average Confidence:** ~85-90%
