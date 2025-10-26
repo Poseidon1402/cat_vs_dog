@@ -76,6 +76,10 @@ cat_dog_prediction/
 │   ├── model.tflite               # TFLite standard model
 │   └── model_quantized.tflite     # TFLite quantized model
 │
+├── scripts/                        # Python scripts
+│   ├── train.py                   # Training script (CLI)
+│   └── convert_to_tflite.py       # TFLite conversion script (CLI)
+│
 ├── assets/                         # Visualization outputs (generated)
 │   ├── test_results_visualization.png
 │   ├── sample_predictions.png
@@ -181,6 +185,10 @@ horizontal_flip = True
 
 ### 1. Training the Model
 
+You can train the model using either the Jupyter notebook or the command-line script.
+
+#### Option A: Using Jupyter Notebook
+
 Open `main.ipynb` and run all cells sequentially:
 
 ```bash
@@ -200,6 +208,82 @@ jupyter notebook main.ipynb
 - With GPU: ~30-60 minutes
 - With CPU: ~3-5 hours
 
+#### Option B: Using Command-Line Script (Recommended for Production)
+
+Train the model with default parameters:
+
+```bash
+python scripts/train.py --data_dir data/1/kagglecatsanddogs_3367a/PetImages --epochs 50
+```
+
+**Common Training Examples:**
+
+```bash
+# Quick training with fewer epochs
+python scripts/train.py --data_dir data/1/kagglecatsanddogs_3367a/PetImages --epochs 20
+
+# Custom batch size and learning rate
+python scripts/train.py --data_dir data/1/kagglecatsanddogs_3367a/PetImages \
+    --epochs 30 --batch_size 16 --learning_rate 0.0001
+
+# Training without data augmentation
+python scripts/train.py --data_dir data/1/kagglecatsanddogs_3367a/PetImages \
+    --epochs 50 --no_augmentation
+
+# Custom output directory and model name
+python scripts/train.py --data_dir data/1/kagglecatsanddogs_3367a/PetImages \
+    --epochs 50 --output_dir models --model_name my_model.keras
+
+# Training on CPU only
+python scripts/train.py --data_dir data/1/kagglecatsanddogs_3367a/PetImages \
+    --epochs 50 --disable_gpu
+
+# Full customization
+python scripts/train.py \
+    --data_dir data/1/kagglecatsanddogs_3367a/PetImages \
+    --output_dir models \
+    --model_name model.keras \
+    --epochs 50 \
+    --batch_size 32 \
+    --learning_rate 0.001 \
+    --image_size 128 \
+    --dropout_rate 0.5 \
+    --validation_split 0.2 \
+    --early_stopping_patience 10 \
+    --reduce_lr_patience 5 \
+    --rotation_range 20 \
+    --shift_range 0.2 \
+    --zoom_range 0.2
+```
+
+**Training Script Parameters:**
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `--data_dir` | Required | Path to training data (Cat/ and Dog/ folders) |
+| `--output_dir` | `models` | Directory to save trained model |
+| `--model_name` | `model.keras` | Output model filename |
+| `--epochs` | `50` | Number of training epochs |
+| `--batch_size` | `32` | Training batch size |
+| `--learning_rate` | `0.001` | Initial learning rate |
+| `--image_size` | `128` | Image height and width |
+| `--validation_split` | `0.2` | Fraction for validation (0.0-1.0) |
+| `--dropout_rate` | `0.5` | Dropout rate for dense layers |
+| `--early_stopping_patience` | `10` | Early stopping patience (epochs) |
+| `--reduce_lr_patience` | `5` | LR reduction patience (epochs) |
+| `--rotation_range` | `20` | Rotation range for augmentation (degrees) |
+| `--shift_range` | `0.2` | Width/height shift range |
+| `--zoom_range` | `0.2` | Zoom range for augmentation |
+| `--no_augmentation` | `False` | Disable data augmentation |
+| `--disable_gpu` | `False` | Disable GPU and use CPU only |
+| `--save_plots` | `True` | Save training history plots |
+| `--plot_dir` | `assets` | Directory to save plots |
+
+**Get help with all parameters:**
+```bash
+python scripts/train.py --help
+```
+
 ### 2. Testing and Benchmarking
 
 Open `test.ipynb` to benchmark the model:
@@ -218,6 +302,97 @@ jupyter notebook test.ipynb
 **Output Files:**
 - `assets/test_results_visualization.png` - 6 analysis charts
 - `assets/sample_predictions.png` - Visual samples
+
+### 3. Converting to TensorFlow Lite
+
+You can convert the trained model to TFLite using either the Jupyter notebook or the command-line script.
+
+#### Option A: Using Jupyter Notebook
+
+Open `conversion.ipynb`:
+
+```bash
+jupyter notebook conversion.ipynb
+```
+
+#### Option B: Using Command-Line Script (Recommended for Automation)
+
+Convert to standard TFLite:
+
+```bash
+python scripts/convert_to_tflite.py --model models/model.keras
+```
+
+Convert to both standard and quantized TFLite:
+
+```bash
+python scripts/convert_to_tflite.py --model models/model.keras --quantize
+```
+
+**Common Conversion Examples:**
+
+```bash
+# Standard TFLite conversion only
+python scripts/convert_to_tflite.py --model models/model.keras
+
+# Quantized conversion only (int8)
+python scripts/convert_to_tflite.py --model models/model.keras --quantize_only
+
+# Both standard and quantized with custom calibration
+python scripts/convert_to_tflite.py --model models/model.keras --quantize \
+    --test_images test_images --num_calibration_samples 200
+
+# With inference benchmarking
+python scripts/convert_to_tflite.py --model models/model.keras --quantize \
+    --benchmark --test_image test_images/1.jpg --benchmark_runs 100
+
+# Custom output directory and names
+python scripts/convert_to_tflite.py --model models/model.keras --quantize \
+    --output_dir models --output_name custom_model
+
+# Full customization
+python scripts/convert_to_tflite.py \
+    --model models/model.keras \
+    --output_dir models \
+    --output_name model \
+    --quantize \
+    --test_images test_images \
+    --num_calibration_samples 100 \
+    --image_size 128 \
+    --benchmark \
+    --test_image test_images/1.jpg \
+    --benchmark_runs 100 \
+    --save_plots \
+    --plot_dir assets
+```
+
+**Conversion Script Parameters:**
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `--model` | Required | Path to input Keras model (.keras or .h5) |
+| `--output_dir` | `models` | Directory to save TFLite models |
+| `--output_name` | `model` | Base name for output files (without extension) |
+| `--quantize` | `False` | Create quantized int8 model |
+| `--quantize_only` | `False` | Only create quantized model |
+| `--test_images` | `test_images` | Directory for quantization calibration |
+| `--num_calibration_samples` | `100` | Number of calibration images |
+| `--image_size` | `128` | Image size (height and width) |
+| `--benchmark` | `False` | Run inference benchmark |
+| `--benchmark_runs` | `100` | Number of benchmark iterations |
+| `--test_image` | `None` | Path to test image for benchmarking |
+| `--save_plots` | `True` | Save comparison plots |
+| `--plot_dir` | `assets` | Directory to save plots |
+
+**Get help with all parameters:**
+```bash
+python scripts/convert_to_tflite.py --help
+```
+
+**Output Files:**
+- `models/model.tflite` - Standard float32 model (~50-60% smaller)
+- `models/model_quantized.tflite` - Quantized int8 model (~75-80% smaller, 2-4x faster)
+- `assets/conversion_comparison.png` - Size and speed comparison charts
 
 ## 🏗️ Model Architecture
 
@@ -320,6 +495,13 @@ Output (Binary: Cat=0, Dog=1)
 | `conversion.ipynb` | Convert Keras model to TensorFlow Lite format |
 | `download_dataset.ipynb` | Utilities for downloading the dataset |
 
+### Python Scripts (CLI)
+
+| File | Description |
+|------|-------------|
+| `scripts/train.py` | Command-line training script with full parameter control |
+| `scripts/convert_to_tflite.py` | Command-line TFLite conversion with quantization support |
+
 ### Generated Files
 
 | File | Description | Size |
@@ -332,6 +514,8 @@ Output (Binary: Cat=0, Dog=1)
 | `assets/model_size_comparison.png` | Model size comparison chart | ~500 KB |
 | `assets/inference_benchmark.png` | Inference speed comparison charts | ~800 KB |
 | `assets/tflite_sample_predictions.png` | TFLite model prediction samples | ~1 MB |
+| `assets/training_history.png` | Training accuracy and loss curves (from script) | ~500 KB |
+| `assets/conversion_comparison.png` | Size and speed comparison (from script) | ~800 KB |
 
 ### Configuration Files
 
