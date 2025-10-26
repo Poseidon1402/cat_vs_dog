@@ -1,1 +1,57 @@
+# Dataset (too large for git)
 data/
+test_images/
+
+# Model files (too large for git)
+models/*.keras
+*.keras
+*.h5
+*.hdf5
+
+# Large output files
+test_predictions.xlsx
+*.xlsx
+
+# TFLite models (optional - uncomment if you want to include them)
+# models/*.tflite
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# TensorFlow checkpoints
+*.ckpt
+*.index
+*.meta
+saved_model/
+checkpoints/
